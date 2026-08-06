@@ -720,6 +720,10 @@ private:
     // A value used in condition commands.  For example the rate at which to change altitude.
     int16_t condition_rate;
 
+	//593
+    uint8_t  TaskContinueButSnapshoot ;//按钮计数快照
+    uint8_t  NeedWaitButtonPressed; //需要等待按钮按下
+
     // 3D Location vectors
     // Location structure defined in AP_Common
     const Location &home = ahrs.get_home();
@@ -850,6 +854,21 @@ private:
     static const TerrainLookupTable Terrain_lookup[];
 #endif
 
+	//593
+   	struct HardwareInfo_t{
+   		uint8_t protocolVersions;
+   		uint8_t fwVer[15];
+   		uint32_t fwCount;
+   		uint32_t productionDate_GMT;
+   		uint64_t productionDate_UT;
+   		uint8_t mcuID[12];
+   		uint8_t reserve[6];
+   	};
+
+   	struct HardwareInfo_t HardwareInfo;
+    bool HardwareAntiCounterfeitingVerification();//593
+    uint32_t bernstein_hash(uint8_t *key,uint16_t len,uint32_t range);
+	
     // Attitude.cpp
     void adjust_nav_pitch_throttle(void);
     void update_load_factor(void);
@@ -1252,6 +1271,10 @@ private:
     // last target alt we passed to tecs
     int32_t tecs_target_alt_cm;
 
+    uint8_t taskContinueButtonCnt = 0; //è????ìD?°′?￥￡???′￥·￠ò?′?￡????óò?′?
+
+    void setTaskContinueBut(void){taskContinueButtonCnt = (1+(taskContinueButtonCnt+1)%255);}; //μ÷ó?ò?′?°′?￥?μ?óò?′?
+    uint8_t getTaskContinueBut(void){return taskContinueButtonCnt;}; //μ÷ó?ò?′?°′?￥?μ?óò?′?
 public:
     void failsafe_check(void);
     bool is_landing() const override;

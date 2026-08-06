@@ -18,6 +18,11 @@
 
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+   //此程序为异地起降专用程序  V4.5.7版本稳定版
+
+    2025年4月17日
+
  */
 
 #include "Plane.h"

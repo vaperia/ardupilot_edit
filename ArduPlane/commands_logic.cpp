@@ -910,6 +910,20 @@ void Plane::do_wait_delay(const AP_Mission::Mission_Command& cmd)
 {
     condition_start = millis();
     condition_value  = cmd.content.delay.seconds * 1000;    // convert seconds to milliseconds
+
+    //如果设定的延时为 0 或者 1 ，则认为需要等待按键 //593
+    if(cmd.content.delay.seconds<=1)
+    {
+    	NeedWaitButtonPressed = 1;
+    	TaskContinueButSnapshoot = getTaskContinueBut();
+    }
+    else
+    {
+    	NeedWaitButtonPressed = 0;
+    }
+
+
+
 }
 
 void Plane::do_within_distance(const AP_Mission::Mission_Command& cmd)
@@ -923,6 +937,24 @@ void Plane::do_within_distance(const AP_Mission::Mission_Command& cmd)
 
 bool Plane::verify_wait_delay()
 {
+	uint8_t curButCnt =  getTaskContinueBut();
+
+	static uint8_t debugPrintf = 1;
+
+	//判断是否有按钮按下，有按下 不相等  //593
+	if((NeedWaitButtonPressed == 1)&&(TaskContinueButSnapshoot == curButCnt))
+	{
+		 debugPrintf = 1;
+		 condition_start = millis();
+		 return false;
+	}
+
+	if(debugPrintf !=0)
+	{
+		gcs().send_text(MAV_SEVERITY_INFO, "The button has been pressed ! Continue the mission!");
+		debugPrintf = 0;
+	}
+
     if ((unsigned)(millis() - condition_start) > (unsigned)condition_value) {
         condition_value         = 0;
         return true;

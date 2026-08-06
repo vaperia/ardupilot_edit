@@ -251,6 +251,7 @@ public:
         VFWD_THR_OVERRIDE =  176, // force enabled VTOL forward throttle method
         MOUNT_LRF_ENABLE =   177,  // mount LRF enable/disable
 
+		TASK_CONTINUE_BUTTON = 198, //Task Continue Button //593
 
         // inputs from 200 will eventually used to replace RCMAP
         ROLL =               201, // roll input

@@ -447,6 +447,13 @@ bool RC_Channel_Plane::do_aux_function(const aux_func_t ch_option, const AuxSwit
     case AUX_FUNC::PRECISION_LOITER:
         // handled by lua scripting, just ignore here
         break;
+    case  AUX_FUNC::TASK_CONTINUE_BUTTON: //593
+    	if(ch_flag == AuxSwitchPos::HIGH)
+    	{
+    		plane.setTaskContinueBut();
+    		gcs().send_text(MAV_SEVERITY_INFO, "User triggers button ! %d ",plane.getTaskContinueBut());
+    	}
+    	break;
 
     default:
         return RC_Channel::do_aux_function(ch_option, ch_flag);
